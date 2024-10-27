@@ -1,0 +1,10 @@
+#! /bin/bash
+for ns in $(kubectl get namespaces -o=name | cut -d '/' -f2)
+do
+  for n in $(kubectl -n $ns get -o=name pvc,configmap,serviceaccount,secret,ingress,service,deployment,statefulset,hpa,job,cronjob)
+  do
+    mkdir -p $ns/$(dirname $n)
+    kubectl -n  $ns get -o=yaml $n > $ns/$n.yaml
+  done
+done 
+  
